@@ -5,7 +5,7 @@ import EditTask from './EditTask'
 import { doc, updateDoc, deleteDoc} from "firebase/firestore";
 import {db} from './firebase'
 import { useDispatch } from 'react-redux';
-import { updateTask } from './features/tasksSlice';
+import { removeTask, updateTask } from './features/tasksSlice';
 
 function Task({id, title, description, completed}) {
 
@@ -28,6 +28,16 @@ function Task({id, title, description, completed}) {
      }
    };
 
+  //  Redux-toolkit function to delete document from firestore
+  const handleDelete = async () => {
+    try {
+      await deleteDoc(doc(db, 'tasks', id));
+      dispatch(removeTask(id));
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   /* function to update firestore */
   // const handleChange = async () => {
   //   const taskDocRef = doc(db, 'tasks', id)
@@ -41,14 +51,14 @@ function Task({id, title, description, completed}) {
   // }
 
   /* function to delete a document from firstore */ 
-  const handleDelete = async () => {
-    const taskDocRef = doc(db, 'tasks', id)
-    try{
-      await deleteDoc(taskDocRef)
-    } catch (err) {
-      alert(err)
-    }
-  }
+  // const handleDelete = async () => {
+  //   const taskDocRef = doc(db, 'tasks', id)
+  //   try{
+  //     await deleteDoc(taskDocRef)
+  //   } catch (err) {
+  //     alert(err)
+  //   }
+  // }
 
   return (
     <div className={`task ${checked && 'task--borderColor'}`}>

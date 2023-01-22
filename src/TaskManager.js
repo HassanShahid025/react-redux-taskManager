@@ -14,9 +14,7 @@ function TaskManager() {
   const [tasks, setTasks] = useState([])
 
 
-  //function with redux-toolkit
-  
-  // const tasks = useSelector((state) => state.tasks.value)
+  //Redux toolkit function to get all tasks from firestore
   const dispatch = useDispatch();
 
   useEffect(() => {

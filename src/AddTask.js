@@ -3,27 +3,48 @@ import {useState} from 'react'
 import './addTask.css'
 import {db} from './firebase'
 import {collection, addDoc, Timestamp} from 'firebase/firestore'
+import { useDispatch } from 'react-redux';
+import { createTask } from "./features/tasksSlice"
 
 function AddTask({onClose, open}) {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const dispatch = useDispatch();
 
-  /* function to add new task to firestore */
+  /* Redux toolkit function to add new task to firestore */
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await addDoc(collection(db, 'tasks'), {
+      const newTask = {
         title: title,
         description: description,
         completed: false,
         created: Timestamp.now()
-      })
-      onClose()
+      }
+      await addDoc(collection(db, 'tasks'), newTask);
+      dispatch(createTask(newTask));
+      onClose();
     } catch (err) {
-      alert(err)
+      alert(err);
     }
   }
+
+  /* function to add new task to firestore */
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault()
+  //   try {
+  //     await addDoc(collection(db, 'tasks'), {
+  //       title: title,
+  //       description: description,
+  //       completed: false,
+  //       created: Timestamp.now()
+  //     })
+  //     onClose()
+  //   } catch (err) {
+  //     alert(err)
+  //   }
+  // }
 
   return (
     <Modal modalLable='Add Task' onClose={onClose} open={open}>
